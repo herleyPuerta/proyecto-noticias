@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+	
+	{% block title %}	
+	Vista Basica de noticias
+	{% endblock %}
+
+{% block content %}
+{% if noticias %}
+		{% for noticia in noticias %}
+			{{noticia.titulo}}
+			<img src='{{MEDIA_URL}}{{noticia.imagen}}'>
+			<br>
+			<br>
+			<br>
+		{% endfor %}
+{% else %}
+	<h2>no existen noticias</h2>
+{% endif %}
+<br>
+<a href="{% url "vista_nueva_noticia" %}">Agregar nueva noticia</a>
+{% endblock %}
+</html>

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}
+Resumen de las Noticias
+{% endblock %}
+
+{% block content %}
+	<h1>Resumen de las Noticias</h1>
+	{% if user.is_authenticated %}
+		<a class ="btn" href="{% url "vista_nueva_noticia" %}"><li class="icon-plus"></li>Noticia Nueva</a><br><br><br>
+	{% endif %}
+	{% if noticias %}
+		<table class="table table-hover">
+			<theader>
+				<tr>
+					<th>Noticia</th>
+					<th>Resumen</th>
+					<th>Contenido</th>
+					<th>Imagen</th>
+				</tr>
+			</theader>
+			{% for noticia in noticias %}
+				<tbody>
+					<tr>
+						<td>{{noticia.titulo}}</td>
+						<td>{{noticia.entradilla}}</td>
+						<td>{{noticia.contenido}}</td>
+						<td><img src='{{MEDIA_URL}}{{noticia.imagen}}'></td>
+						<td><a class="btn" href="/noticia/{{noticia.id}}"><li class="icon-search"></li>Leer</a></td>
+						{% if user.is_authenticated %}
+							<td><a class="btn" href="/edit/noticia/{{noticia.id}}"><li class="icon-pencil"></li>Editar la Noticia</a></td>
+						{% endif %}
+						<td><a class="btn" href="/delete/noticia/{{noticia.id}}"><li class="icon-remove"></li>Eliminar la Noticia</a></td>
+					</tr>
+				</tbody>
+			{% endfor %}
+		</table>
+	{% else %}
+		<h2>No se han publicado noticias</h2>
+	{% endif %}
+<!--
+{% if productos %}
+	<div class="pagination">
+		<ul>
+			<li><a href="/productos/page/1"> << </a></li>
+			{% if productos.has_previous %}
+				<li><a href="/productos/page/{{productos.previous_page_number }} /"> Prev</a></li>
+			{% else %}
+				<li><a href="#"> Prev</a></li>
+			{% endif %}
+			{% if productos.has_next %}
+				<li><a href="/productos/page/{{productos.next_page_number }} /"> Next </a></li>
+			{% else %}
+				<li><a href="#"> Next </a></li>
+			{% endif %}
+			<li><a href="/productos/page/{{productos.paginator.num_pages }}"> >> </a></li>
+		</ul>
+	</div>
+	<br>
+	<h4> Pagina {{ productos.number }} de {{ productos.paginator.num_pages }}</h4>
+{% endif %}
+-->
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+Editar la Noticia
+{% endblock %}
+{% block content %}
+<div class="row">
+	<div class="span6">
+	<form action="." method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Grabar">
+		<input type="reset" value="Limpiar">
+	</form>
+</div>
+{% endblock %}

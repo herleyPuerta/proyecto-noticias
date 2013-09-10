@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+Noticia: {{ noticia.titulo }}
+{% endblock %}
+{% block content %}
+<h1> {{ noticia.titulo }} </h1>
+<img src="/media/{{ noticia.imagen }}" width="130px" heigth="100px" />
+
+<p>{{ noticia.entradilla }} </p>
+<p>{{ noticia.contenido }} </p>
+<a href={% url "vistaNoticias" %} class="btn btn-primary">Lista de noticias</a>
+{% endblock %}
