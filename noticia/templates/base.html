@@ -1,35 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>
-		{% block title %}
-			Bienvenidos
-		{% endblock %}
-	</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Noticias - {% block titulo %}{% endblock titulo %}</title>
+	<meta name="description" content="Plataforma para la administración de noticias.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="/media/css/normalize.css">
+	<link rel="stylesheet" href="/media/css/style.css" />
 	<link rel="stylesheet" href="/media/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="/media/bootstrap/css/bootstrap-responsive.css">
 	<script src="/media/js/jquery.js"></script>
 	<script src="/media/bootstrap/js/bootstrap.js"></script>
 	<script src="/media/js/modernizr-min.js"></script>
-	<style type="text/css">
-		body{
-			padding-top: 60px;
-			padding-bottom: 40px;
-		}
-		.siderbar-nav{
-			padding: 9px 0;
-		}
-		img{
-			width: 60px;
-			height: 40px;
-			border-radius: 10px,10px;
-		}
-		#formulario{
-			padding: 50px;
-			padding-left: 320px;
-		}
-	</style>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -37,15 +20,14 @@
 			<a class="brand"href="/noticias">Noticias</a>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<section class="container-fluid" style="padding-top:80px;">
 		<div class="row-fluid">
-			<div class="span9"><!--tamano-->
-				<div class="hero-unit"><!--color-->
-					{% block content %}
-					{% endblock %}
-				</div>
-			</div>
+			{% block contenido %}
+			{% endblock contenido %}
 		</div>
-	</div>
+	</section>
+	<footer class="footer">
+		<h4 >&copy Noticias Apptitude</h4>
+	</footer>
 </body>
 </html>
