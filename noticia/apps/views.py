@@ -3,7 +3,9 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from noticia.apps.models import Usuario,Noticia
 from django.contrib.auth import login, authenticate, logout
-from noticia.apps.forms import editNoticiaForm
+from noticia.apps.forms import editNoticiaForm,ContactForm
+from django.core.mail import EmailMultiAlternatives
+from django.core.paginator import Paginator,EmptyPage,InvalidPage
 
 def index_view(request):
 	if request.user.is_authenticated():
@@ -13,20 +15,19 @@ def index_view(request):
 
 
 def login_view(request):
-	if request.method == "POST":
-		username = request.POST['username']
-		password = request.POST['password']
-		usuario = authenticate(username=username, password=password)
-		if usuario is not None:
-			if usuario.is_active:
+	try:
+		if request.method == "POST":
+			username = request.POST['username']
+			password = request.POST['password']
+			usuario = authenticate(username=username, password=password)
+			if usuario is not None and usuario.is_active:
 				login(request,usuario)
 				return HttpResponseRedirect('/')
-			else:
-				return render_to_response('noactivo.html',locals(),context_instance=RequestContext(request))
-		else:
-			return render_to_response('nousuario.html',locals(),context_instance=RequestContext(request))
-	else:
-		return render_to_response('login.html', locals(), context_instance = RequestContext(request))
+			loginFailed = True
+	except:
+		return HttpResponseRedirect('/')
+	loginFailed = True
+	return render_to_response('login.html', locals(), context_instance = RequestContext(request))
 
 def logout_view(request):
 	logout(request)
@@ -44,35 +45,31 @@ def nueva_noticia_view(request):
 		imagen		= request.FILES['imagen']
 		noticia 	= Noticia(titulo=titulo,entradilla=entradilla,contenido=contenido,imagen=imagen)
 		noticia.save()
-		return HttpResponseRedirect('/')
+		return HttpResponseRedirect('/noticias')
 	else:
 		return render_to_response('nuevanoticia.html',context_instance=RequestContext(request))
-
-
-def edit_noticia_view(request, id_not):
-	noticia = Noticia.objects.get(id=id_not)
-	if request.method == "POST":
-		form = editNoticiaForm(request.POST,request.FILES)
-		if form.is_valid():
-			titulo = form.cleaned_data['titulo']
-			entradilla = form.cleaned_data['entradilla']
-			contenido = form.cleaned_data['contenido']
-			imagen = form.cleaned_data['imagen']
-			noticia.titulo = titulo
-			noticia.entradilla = entradilla
-			noticia.contenido = contenido
-			if imagen:
-				noticia.imagen = imagen
-			noticia.save() #se guarda el modelo editado
-			return HttpResponseRedirect('/noticias')
-	if request.method == "GET":
-		form = editNoticiaForm(initial={
-								'titulo' 		: noticia.titulo,
-								'entradilla' 	: noticia.entradilla,
-								'contenido' 	: noticia.contenido, 
-			})
-	ctx = {'form':form,'noticia':noticia}
-	return render_to_response('editNoticia.html',ctx, context_instance=RequestContext(request))
+		
+def edit_noticia_view(request,id_not):
+	try:		
+		noticia = Noticia.objects.get(id=id_not)
+		if request.method == 'POST':
+			if noticia:
+				titulo = request.POST['titulo']
+				entradilla = request.POST['entradilla']
+				contenido	= request.POST['contenido']
+				imagen		= request.POST['imagen']
+				noticia.titulo = titulo
+				noticia.entradilla = entradilla
+				noticia.contenido = contenido
+				if imagen:
+					noticia.imagen = imagen
+				noticia.save()
+				return HttpResponseRedirect('/noticias')
+		else:
+			ctx = {'noticia':noticia}
+			return render_to_response('editNoticia.html',ctx,context_instance=RequestContext(request))
+	except Noticia.DoesNotExist:
+		return HttpResponseRedirect("/noticias")
 
 def delete_noticia_view(request, id_not):
 	try:
@@ -87,3 +84,26 @@ def singleNoticia_view(request,id_not):
 	noticia = Noticia.objects.get(id=id_not)
 	ctx = {'noticia':noticia}
 	return render_to_response('singleNoticia.html',ctx,context_instance=RequestContext(request))
+
+def contacto_view(request):
+	info_enviado = False
+	email = ""
+	titulo = ""
+	texto = ""
+	if request.method == "POST":
+		formulario = ContactForm(request.POST)
+		if formulario.is_valid():
+			info_enviado = True
+			email = formulario.cleaned_data['Email']
+			titulo = formulario.cleaned_data['Titulo']
+			texto = formulario.cleaned_data['Texto']
+			# configuracion usando Gmail
+			to_admin = 'pruebadjango1@gmail.com'
+			html_content = "informacion recibida de [%s]<br>***Mensaje*** <br>%s"%(email,texto)
+			msg = EmailMultiAlternatives('Correo de Contacto',html_content,'from@server.com',[to_admin])
+			msg.attach_alternative(html_content,'text/html')
+			msg.send()
+	else:
+		formulario = ContactForm()
+	ctx = {'form':formulario,'email':email,'titulo':titulo,'texto':texto,  'info_enviado':info_enviado}
+	return render_to_response('contacto.html',ctx,context_instance=RequestContext(request))

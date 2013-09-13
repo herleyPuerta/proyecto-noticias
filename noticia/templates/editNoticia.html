@@ -1,15 +1,37 @@
 {% extends 'base.html' %}
+{% block scripts %}
+    <script src="/media/js/cufon-yui.js" type="text/javascript"></script>
+    <script src="/media/js/ChunkFive_400.font.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        Cufon.replace('h1',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h2',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h3',{ textShadow: '1px 1px #000'});
+        Cufon.replace('.back');
+    </script>
+{% endblock scripts %}
 {% block title %}
 Editar la Noticia
 {% endblock %}
-{% block content %}
-<div class="row">
-	<div class="span6">
-	<form action="." method="POST" enctype="multipart/form-data">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Grabar">
-		<input type="reset" value="Limpiar">
-	</form>
-</div>
+{% block contenido %}
+    <section id="container">
+        <h2>Nueva Noticia</h2>
+        <form name="hongkiat" id="hongkiat-form" method="post" action="." enctype="multipart/form-data">
+            {% csrf_token %}
+        <div id="wrapping" class="clearfix">
+            <section id="aligned">
+            <input type="text" name="titulo" id="titulo" value="{{noticia.titulo}}" autocomplete="off" tabindex="1" class="txtinput" onKeyDown="contador(this.form.titulo,this.form.remLenT,60);" onKeyUp="contador(this.form.titulo,this.form.remLenT,60);" required>
+
+            <textarea name="entradilla" id="entradilla" placeholder="Introduccion a la noticia" tabindex="5" class="txtblock" autocomplete="off" tabindex="1" class="txtinput" onKeyDown="contador(this.form.entradilla,this.form.remLen,160);" onKeyUp="contador(this.form.entradilla,this.form.remLen,160);" required/>{{noticia.entradilla}}</textarea>
+            <textarea name="contenido" id="contenido" placeholder="Texto de la noticia" tabindex="5" class="txtblock" autocomplete="off" tabindex="1" class="txtinput" onKeyDown="contador(this.form.contenido,this.form.remLenC,3000);" onKeyUp="contador(this.form.contenido,this.form.remLenC,3000);" required/>{{noticia.contenido}}</textarea>
+            <input type="file" name="imagen">
+            <img src='{{MEDIA_URL}}{{noticia.imagen}}' id="imagenEdit">
+            </section>
+        </div>
+        <section id="buttons">
+            <input type="reset" name="reset" id="resetbtn" class="resetbtn" value="Reset">
+            <input type="submit" name="submit" id="submitbtn" class="submitbtn" tabindex="7" value="Submit this!">
+            <br style="clear:both;">
+        </section>
+        </form>
+    </section>
 {% endblock %}

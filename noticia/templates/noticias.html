@@ -1,63 +1,54 @@
 {% extends 'base.html' %}
+{% block scripts %}
+    <script src="/media/js/cufon-yui.js" type="text/javascript"></script>
+    <script src="/media/js/ChunkFive_400.font.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        Cufon.replace('h1',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h2',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h3',{ textShadow: '1px 1px #000'});
+        Cufon.replace('.back');
+    </script>
+{% endblock scripts %}
 {% block title %}
 Resumen de las Noticias
 {% endblock %}
 
-{% block content %}
-	<h1>Resumen de las Noticias</h1>
+{% block contenido %}
 	{% if user.is_authenticated %}
-		<a class ="btn" href="{% url "vista_nueva_noticia" %}"><li class="icon-plus"></li>Noticia Nueva</a><br><br><br>
-	{% endif %}
+		<h1>Resumen de las Noticias</h1>
+		<a class ="btn" href="{% url "vista_nueva_noticia" %}"><li class="icon-plus"></li>Noticia Nueva</a>
+		
 	{% if noticias %}
 		<table class="table table-hover">
-			<theader>
-				<tr>
-					<th>Noticia</th>
-					<th>Resumen</th>
-					<th>Contenido</th>
-					<th>Imagen</th>
-				</tr>
-			</theader>
 			{% for noticia in noticias %}
 				<tbody>
-					<tr>
-						<td>{{noticia.titulo}}</td>
-						<td>{{noticia.entradilla}}</td>
-						<td>{{noticia.contenido}}</td>
-						<td><img src='{{MEDIA_URL}}{{noticia.imagen}}'></td>
-						<td><a class="btn" href="/noticia/{{noticia.id}}"><li class="icon-search"></li>Leer</a></td>
-						{% if user.is_authenticated %}
-							<td><a class="btn" href="/edit/noticia/{{noticia.id}}"><li class="icon-pencil"></li>Editar la Noticia</a></td>
-						{% endif %}
-						<td><a class="btn" href="/delete/noticia/{{noticia.id}}"><li class="icon-remove"></li>Eliminar la Noticia</a></td>
-					</tr>
+					
+						<section id="noticia">
+							<tr>
+						<article>
+							<h1>{{noticia.titulo}}</h1>
+							<img src="/media/{{ noticia.imagen }}"/>
+							<h3>{{noticia.entradilla}}</h3>
+								<a class="btn" href="/noticia/{{noticia.id}}"><li class="icon-search"></li>Leer</a>
+								<a class="btn" href="/edit/noticia/{{noticia.id}}"><li class="icon-pencil"></li>Editar</a>
+								<a class="btn" href="/delete/noticia/{{noticia.id}}"><li class="icon-remove"></li>Eliminar</a>	
+						</article>
+						</tr>
+						</section>					
 				</tbody>
 			{% endfor %}
 		</table>
 	{% else %}
-		<h2>No se han publicado noticias</h2>
+		<h3>No se han publicado noticias</h3>
 	{% endif %}
-<!--
-{% if productos %}
-	<div class="pagination">
-		<ul>
-			<li><a href="/productos/page/1"> << </a></li>
-			{% if productos.has_previous %}
-				<li><a href="/productos/page/{{productos.previous_page_number }} /"> Prev</a></li>
-			{% else %}
-				<li><a href="#"> Prev</a></li>
-			{% endif %}
-			{% if productos.has_next %}
-				<li><a href="/productos/page/{{productos.next_page_number }} /"> Next </a></li>
-			{% else %}
-				<li><a href="#"> Next </a></li>
-			{% endif %}
-			<li><a href="/productos/page/{{productos.paginator.num_pages }}"> >> </a></li>
-		</ul>
-	</div>
-	<br>
-	<h4> Pagina {{ productos.number }} de {{ productos.paginator.num_pages }}</h4>
-{% endif %}
--->
-
-{% endblock %}
+	{% else %}
+	<html>
+	<head>
+		<meta http-equiv="REFRESH" content="0;url=/login/">
+	</head>
+	<body>
+	
+	</body>
+	</html>
+	{% endif %}
+{% endblock contenido %}

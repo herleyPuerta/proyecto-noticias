@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Contactanos{% endblock %}
+{% block contenido %}
+	{% if info_enviado %}
+		<br>
+		Informacion:
+		<br>
+		<p>Email:	{{email}}</p>
+		<p>Titulo: {{titulo}}</p>
+		<p>texto: {{texto}} </p>
+	{% else %}
+		<form action="." method="POST">
+			{% csrf_token %}
+			{{form.as_p}}
+			<button class="btn btn-primary" type="submit">Enviar Comentario</button>
+		</form>
+	{% endif %}
+{% endblock contenido %}

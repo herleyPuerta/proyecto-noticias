@@ -10,7 +10,7 @@ class Usuario(models.Model):
 
 class Noticia(models.Model):
 	def url(self,filename):
-		return "Noticias/%s/%s/%s"%(self.fechaCreada,self.titulo,filename)
+		return "noticias/%s/%s"%(self.fechaCreada,filename)
 
 	titulo				= models.CharField(max_length=60,null=False,blank=False)
 	fechaCreada 		= models.DateField(auto_now_add=True)

@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
+{% block scripts %}
+    <script src="/media/js/cufon-yui.js" type="text/javascript"></script>
+    <script src="/media/js/ChunkFive_400.font.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        Cufon.replace('h1',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h2',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h3',{ textShadow: '1px 1px #000'});
+        Cufon.replace('.back');
+    </script>
+{% endblock scripts %}
 {% block title %}
 Noticia: {{ noticia.titulo }}
 {% endblock %}
-{% block content %}
-<h1> {{ noticia.titulo }} </h1>
-<img src="/media/{{ noticia.imagen }}" width="130px" heigth="100px" />
-
-<p>{{ noticia.entradilla }} </p>
-<p>{{ noticia.contenido }} </p>
+{% block contenido %}
+<h1 style="color:#330000"> {{ noticia.titulo }} </h1>
+<h3>{{ noticia.entradilla }}</h3>
+<img src="/media/{{ noticia.imagen }}"/>
+<div id="single">
+<p>{{ noticia.contenido }}</p>
+</div>
 <a href={% url "vistaNoticias" %} class="btn btn-primary">Lista de noticias</a>
+
 {% endblock %}

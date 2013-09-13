@@ -9,5 +9,6 @@ urlpatterns = patterns('noticia.apps.views',
     url(r'^noticia/(?P<id_not>.*)/$','singleNoticia_view', name='vista_single_noticia'),
     url(r'^login/$', 'login_view', name='vistaLogin'),
     url(r'^logout/$', 'logout_view', name='vistaLogout'),
-    url(r'^noticias/$','noticias_view',name='vistaNoticias'),    
+    url(r'^noticias/$','noticias_view',name='vistaNoticias'),
+    url(r'^contacto/$', 'contacto_view', name='vista_contacto'),
 )

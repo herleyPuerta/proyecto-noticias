@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block scripts %}
+    <script src="/media/js/cufon-yui.js" type="text/javascript"></script>
+    <script src="/media/js/ChunkFive_400.font.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        Cufon.replace('h1',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h2',{ textShadow: '1px 1px #fff'});
+        Cufon.replace('h3',{ textShadow: '1px 1px #000'});
+        Cufon.replace('p',{ textShadow: '1px 1px #000'});
+        Cufon.replace('.back');
+    </script>
+    <script type="text/javascript">
+        function contador (campo,limite) { 
+            if (campo.value.length > limite){
+                campo.value = campo.value.substring(0, limite);
+            }
+        }
+</script>
+{% endblock scripts %}
+<div id="notitulo">
+<h2>Nueva Noticia</h2>
+<div id="form_wrapper" class="form_wrapper" style="width:550px;margin-bottom:15px;">
+    <form class="register active" method="POST" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>      
+            <h3>Noticia</h3>           
+            <input type="text" name="titulo" placeholder="titulo" onKeyDown="contador(this.form.titulo,this.form.remLenT,60);" onKeyUp="contador(this.form.titulo,this.form.remLenT,60);" required/>
+            <input id="numero1" type="text" name="remLenT" size="1" maxlength="2" value="60" class="contador"readonly>
+            <span class="error">This is an error</span>
+            <div class="entrada">
+                <textarea rows="6" name="entradilla" onKeyDown="contador(this.form.entradilla,this.form.remLen,160);" onKeyUp="contador(this.form.entradilla,this.form.remLen,160);" required/></textarea>
+                <input id="numero2" type="text" name="remLen" size="3" maxlength="3" value="160" class="contador" readonly>
+            <span class="error">This is an error</span>
+            </div>
+            <div class="entrada">
+            <textarea rows="6" name="contenido" placeholder="texto de la noticia" id="textareaContenido" onKeyDown="contador(this.form.contenido,this.form.remLenC,3000);" onKeyUp="contador(this.form.contenido,this.form.remLenC,3000);" required/></textarea>
+            <input id="numero3" type="text" name="remLenC" size="5" maxlength="3" value="3000"  readonly>
+            <span class="error">This is an error</span>
+            </div>
+            <div class="entrada">
+            <input type="file" name="imagen" required/>
+            <span class="error">This is an error</span>
+            </div>
+            <input type="submit" value="guardar" />
+            <div class="clear"></div>
+        </fieldset>
+    </form>
+</div>
+
+
+
+
+·############################################################################################################
+
+Contenido de editar la noticia
+
+{% block contenido %}
+    <div id="notitulo">
+        <h2>Editar la Noticia</span></h2>
+    </div>       
+        <section class="content">
+            <div id="form_wrapper" class="form_wrapper" style="width:550px;margin-bottom:70px">
+                <form class="register active" method="POST" action="." enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="text" name="titulo" placeholder="Titulo" value="{{noticia.titulo}}" onKeyDown="contador(this.form.titulo,this.form.remLenT,60);" onKeyUp="contador(this.form.titulo,this.form.remLenT,60);" required/>
+                    <div class="entrada">
+                        <textarea name="entradilla"id="textareaEntradilla" onKeyDown="contador(this.form.entradilla,this.form.remLen,160);" onKeyUp="contador(this.form.entradilla,this.form.remLen,160);" required/>{{noticia.entradilla}}</textarea>
+                    </div>
+                    <div class="entrada">
+                        <textarea name="contenido" id="textareaContenido" onKeyDown="contador(this.form.contenido,this.form.remLenC,3000);" onKeyUp="contador(this.form.contenido,this.form.remLenC,3000);" required/>{{noticia.contenido}}</textarea>
+                    </div>
+                    <div class="entrada">
+                        <input type="file" name="imagen">
+                    </div>
+                    <img src='{{MEDIA_URL}}{{noticia.imagen}}' id="imagenEdit">
+                    <input type="submit" value="Grabar">
+                </form>
+            </div>
+        </section>
+{% endblock contenido %}

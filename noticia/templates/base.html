@@ -13,21 +13,47 @@
 	<script src="/media/js/jquery.js"></script>
 	<script src="/media/bootstrap/js/bootstrap.js"></script>
 	<script src="/media/js/modernizr-min.js"></script>
+	<script type="text/javascript">
+		function contador (campo, cuentacampo, limite) { 
+   			if (campo.value.length > limite) campo.value = campo.value.substring(0, limite); 
+   			else cuentacampo.value = limite - campo.value.length; 
+		}
+	</script>
+	<script type="text/javascript">
+		$(document).on('ready',function(){
+			$.ajax({
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dateType:"json",
+				url:"/ws/noticias/",
+				success:function(response){
+					var i = (response.length-1)-3;
+					for(i;i<=response.length-1;i++){
+						$('#NoticiasNuevas').append("<li>"+response[i].fields.titulo+"</li>");
+					}
+				}
+			});
+		});
+	</script>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-inner">
 			<a class="brand"href="/noticias">Noticias</a>
+			{% if user.is_authenticated %}
+			<li><a href="{% url "vistaLogout" %}"> Cerrar Seccion</a></li>
+			{% endif %}
 		</div>
 	</div>
-	<section class="container-fluid" style="padding-top:80px;">
-		<div class="row-fluid">
+	<!--<section class="container-fluid" style="padding-top:80px;">-->
+	<section class="contenedor">
+		<!--<div class="row-fluid">-->
 			{% block contenido %}
 			{% endblock contenido %}
-		</div>
+		<!--</div>-->
 	</section>
 	<footer class="footer">
-		<h4 >&copy Noticias Apptitude</h4>
+		<h4 >&copy Noticias Apptitud</h4>
 	</footer>
 </body>
 </html>
